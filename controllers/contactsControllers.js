@@ -1,6 +1,8 @@
-import { addContact, getContactById, listContact, removeContact, updatedContact} from "../services/contactsServices.js";
+import { addContact, getContactById, listContact, removeContact, updatedContact, updatedContactFavorite} from "../services/contactsServices.js";
 import { ctrlWrapper } from "../helpers/ctrlWrraper.js";
 import HttpError from "../helpers/HttpError.js";
+
+
 
 
 
@@ -13,9 +15,7 @@ export const getOneContact = ctrlWrapper(async(req, res) => {
     const {id} = req.params;
 
     const contact = await getContactById (id);
-    if (!contact){
-       throw HttpError (404, "Not Found")
-    }
+    
     res.json(contact)
 });
 
@@ -23,9 +23,7 @@ export const deleteContact = ctrlWrapper(async(req, res) => {
     const {id} = req.params;
 
     const delContact = await removeContact (id);
-    if (!delContact){
-       throw HttpError (404, "Not Found")
-    }
+    
     res.json(delContact) 
 });
 
@@ -43,3 +41,11 @@ if (!updContact){
 }
 res.json(updContact)
 });
+export const updateContactFavorive =await ctrlWrapper (async (req, res)=>{
+    const {id} = req.params;
+    const updContact = await updatedContactFavorite(id, req.body);
+    if (!updContact){
+        throw HttpError (404, "Not found")
+    }
+    res.json(updContact)
+})

@@ -7,8 +7,8 @@ import HttpError from "../helpers/HttpError.js";
 
 
 export const getAllContacts = ctrlWrapper(async(req, res) => {
-const allContacts = await listContact();
-res.json(allContacts)
+const contacts = await listContact();
+res.json(contacts)
 });
 
 export const getOneContact = ctrlWrapper(async(req, res) => {
@@ -22,30 +22,30 @@ export const getOneContact = ctrlWrapper(async(req, res) => {
 export const deleteContact = ctrlWrapper(async(req, res) => {
     const {id} = req.params;
 
-    const delContact = await removeContact (id);
+    const contact = await removeContact (id);
     
-    res.json(delContact) 
+    res.json(contact) 
 });
 
 export const createContact =ctrlWrapper(async (req, res) => {
-    const newContact = await addContact(req.body)
-    res.status(201).json(newContact)
+    const contact = await addContact(req.body)
+    res.status(201).json(contact)
 });
 
 export const updateContact = ctrlWrapper(async (req, res) => {
     const {id} = req.params;
     
-const updContact = await updatedContact(id, req.body);
-if (!updContact){
+const contact = await updatedContact(id, req.body);
+if (!contact){
     throw HttpError (404, "Not found")
 }
-res.json(updContact)
+res.json(contact)
 });
 export const updateContactFavorive =await ctrlWrapper (async (req, res)=>{
     const {id} = req.params;
-    const updContact = await updatedContactFavorite(id, req.body);
-    if (!updContact){
+    const contact = await updatedContactFavorite(id, req.body);
+    if (!contact){
         throw HttpError (404, "Not found")
     }
-    res.json(updContact)
+    res.json(contact)
 })

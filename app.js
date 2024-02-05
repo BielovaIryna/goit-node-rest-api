@@ -2,8 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
-import './envs/env.js';
+import dotenv from 'dotenv';
 import contactsRouter from "./routes/contactsRouter.js";
 
 
@@ -33,6 +32,6 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 const {port} = process.env.PORT??4000;
-app.listen(port, () => {
-  console.log("Server is running. Use our API on port: 3000");
+app.listen(3000, () => {
+  console.log(`Server is running. Use our API on port: ${port}`);
 });

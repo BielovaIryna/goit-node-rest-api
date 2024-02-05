@@ -13,17 +13,17 @@ export const listContact= () => Contacts.find();
     
 
   export const updatedContact = async (contactId, data) =>{
-    const updateContact = await Contacts.findByIdAndUpdate(contactId, data, {new: true} )
+    const contact = await Contacts.findByIdAndUpdate(contactId, data, {new: true} )
     
-    return updateContact
+    return contact
    }
    
   export const updatedContactFavorite = async (contactId, data) =>{
-    const updateContact = await Contacts.findById(contactId);
+    const contact = await Contacts.findById(contactId);
     Object.keys(data).forEach((key) =>{
-      updateContact[key] = data[key]
+      contact[key] = data[key]
     })
-    return updateContact.save()
+    return contact.save()
   }
 
 

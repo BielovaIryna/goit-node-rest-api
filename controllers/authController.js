@@ -1,10 +1,17 @@
+
 import { ctrlWrapper } from "../helpers/ctrlWrraper.js";
+import { Users } from "../models/usersModel.js";
 import { userLogin, userRegister } from "../services/usersServices.js";
+import path from 'path';
+import {jimpImg } from "../helpers/jimps.js";
+import fs from 'fs/promises';
+
+
 
 const register = ctrlWrapper(async(req, res)=>{
-    const {user, token} = await userRegister(req.body);
+    const {user} = await userRegister(req.body);
     res.status(201).json({
-       user
+       user})
 });
 
 const login = ctrlWrapper (async(req, res) =>{
@@ -19,7 +26,7 @@ const login = ctrlWrapper (async(req, res) =>{
 })
 
 const logout = ctrlWrapper(async(req, res)=>{
-    await User.findByIdAndUpdate(req.user.id, { token: " " });
+    await Users.findByIdAndUpdate(req.user.id, { token: " " });
 
     res.status(204).send("Logout success");
 
@@ -30,8 +37,21 @@ const current =async(req, res)=>{
 }
 
 const updateAvatar = ctrlWrapper(async(req, res)=>{
-    const updatedUser = await updateUserAvatar (req.body, req.user, req.file)
-
-    res.status(200).json(user.avatarURL)
+    
+        const { _id } = req.user;
+        console.log(_id);
+        console.log(req.file);
+        if (req.file === undefined)
+          throw HttpError(404, "Image was not found, check form-data values");
+        const { path: tempUpload, originalname } = req.file;
+        await jimpImg(tempUpload);
+        const fileName = `${_id}${originalname}`;
+        const resultUpload = path.join(avatarsDir, fileName);
+        await fs.rename(tempUpload, resultUpload);
+        const avatarURL = path.join("/avatars", fileName);
+        await Users.findByIdAndUpdate(_id, { avatarURL });
+    
+        res.status(200).json({ avatarURL });
+      
 })
 export {register, login, logout, current, updateAvatar}

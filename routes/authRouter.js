@@ -3,7 +3,8 @@ import validateBody from "../helpers/validateBody.js";
 import { registerUserSchema } from "../schemas/usersSchemas.js";
 import { register, login, logout, current, updateAvatar} from "../controllers/authController.js";
 import {auth, checkRegisterData } from "../middlewares/authMiddleware.js";
-import upload from "../middlewares/uploadMiddlewares.js";
+import { upload } from "../middlewares/uploadMiddlewares.js";
+
 const authRouter =express.Router();
 authRouter.post('/register', validateBody(registerUserSchema), checkRegisterData, register);
 authRouter.post('/login', validateBody(registerUserSchema), login);

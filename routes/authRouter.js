@@ -10,5 +10,6 @@ authRouter.post('/register', validateBody(registerUserSchema), checkRegisterData
 authRouter.post('/login', validateBody(registerUserSchema), login);
 authRouter.post('/logout',auth, logout );
 authRouter.get('/current', auth, current);
-authRouter.patch('/avatars',auth, upload.single("avatar"), updateAvatar)
+authRouter.patch('/avatars',auth, upload.single("avatar"), updateAvatar);
+
 export default authRouter;

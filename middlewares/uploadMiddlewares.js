@@ -5,10 +5,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const tempDir = path.join(__dirname, "../", "temp");
+const tmpDir = path.join(__dirname, "../", "tmp");
 
 const multerConfig = multer.diskStorage({
-  destination: tempDir,
+  destination: tmpDir,
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },

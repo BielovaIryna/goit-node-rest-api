@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-
+import crypto from 'crypto';
+import gravatar from 'gravatar'
 
 const usersSchema = new Schema (
     {
@@ -21,12 +22,23 @@ const usersSchema = new Schema (
           type: String,
           default: null,
         },
+                 
+          avatarURL: {
+            type: String},
+          
+           
         
       },
       {
         versionKey: false
       }
 )
-
+usersSchema.pre('save', async function (next){
+  if (this.isNew){
+    const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+    this.avatarURL=gravatar.url(emailHash, {s: '100', r: 'x', d: 'monsterid'})
+  }
+  next()
+})
 const Users = model ('user', usersSchema);
 export {Users}

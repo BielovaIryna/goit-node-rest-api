@@ -4,9 +4,7 @@ import { userLogin, userRegister } from "../services/usersServices.js";
 const register = ctrlWrapper(async(req, res)=>{
     const {user, token} = await userRegister(req.body);
     res.status(201).json({
-       user,
-        token
-    });
+       user
 });
 
 const login = ctrlWrapper (async(req, res) =>{
@@ -31,4 +29,9 @@ const current =async(req, res)=>{
     res.status(200).json({ email, subscription });
 }
 
-export {register, login, logout, current}
+const updateAvatar = ctrlWrapper(async(req, res)=>{
+    const updatedUser = await updateUserAvatar (req.body, req.user, req.file)
+
+    res.status(200).json(user.avatarURL)
+})
+export {register, login, logout, current, updateAvatar}

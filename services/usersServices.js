@@ -7,7 +7,7 @@ const userRegister = async(userData)=>{
     const pssHash = await bcrypt.hash(userData.password, 10)
     const newUser = await Users.create ({...userData, password:pssHash});
   
-        return {user: {email:newUser.email, subscription:newUser.subscription}}
+        return {user: {email:newUser.email, subscription:newUser.subscription, avatarURL:newUser.avatarURL}}
 
 }
 const userLogin= async ({email, password}) =>{

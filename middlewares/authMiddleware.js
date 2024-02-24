@@ -37,9 +37,11 @@ const auth = async(req, res, next) =>{
 }
 
   
+const uploadAvatar = async (req, res, next)=>{
 
+}
     
 
 
   
-export {checkRegisterData, auth}
+export {checkRegisterData, auth, uploadAvatar}

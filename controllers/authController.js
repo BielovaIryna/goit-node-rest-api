@@ -4,8 +4,7 @@ import { userLogin, userRegister } from "../services/usersServices.js";
 const register = ctrlWrapper(async(req, res)=>{
     const {user, token} = await userRegister(req.body);
     res.status(201).json({
-       user,
-        token
+       user
     });
 });
 

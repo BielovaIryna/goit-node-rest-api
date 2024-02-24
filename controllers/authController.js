@@ -1,8 +1,9 @@
 import { ctrlWrapper } from "../helpers/ctrlWrraper.js";
+import { Users } from "../models/usersModel.js";
 import { userLogin, userRegister } from "../services/usersServices.js";
 
 const register = ctrlWrapper(async(req, res)=>{
-    const {user, token} = await userRegister(req.body);
+    const {user} = await userRegister(req.body);
     res.status(201).json({
        user
     });
@@ -20,7 +21,7 @@ const login = ctrlWrapper (async(req, res) =>{
 })
 
 const logout = ctrlWrapper(async(req, res)=>{
-    await User.findByIdAndUpdate(req.user.id, { token: " " });
+    await Users.findByIdAndUpdate(req.user.id, { token: " " });
 
     res.status(204).send("Logout success");
 

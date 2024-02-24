@@ -2,24 +2,37 @@ import { Contacts } from "../models/contactsModel.js";
 
 
 
-export const listContact= () => Contacts.find();
+export const listContact= (userId) =>{
+
+  return Contacts.find({owner:userId});
+} 
+
   
-  export const getContactById= (contactId)=> Contacts.findById (contactId);
+  export const getContactById= async (contactId, userId) => {
+    const contact = await Contacts.findOne({ _id: contactId, owner: userId });
+    return contact
+    };
     
   
-  export const removeContact= async (contactId) => Contacts.findByIdAndDelete(contactId);
+  export const removeContact= async (contactId, userId) =>{
+   const contact= Contacts.findByIdAndDelete({_id:contactId, owner:userId});
+return contact
+  } 
    
-  export const addContact = async (data) => Contacts.create(data);
+  export const addContact = async (data, owner) =>{
+   
+    return Contacts.create({...data, owner});
+  } 
     
 
-  export const updatedContact = async (contactId, data) =>{
-    const contact = await Contacts.findByIdAndUpdate(contactId, data, {new: true} )
+  export const updatedContact = async (contactId, userId, data) =>{
+    const contact = await Contacts.findByIdAndUpdate({_id:contactId, owner:userId}, data, {new: true} )
     
     return contact
    }
    
-  export const updatedContactFavorite = async (contactId, data) =>{
-    const contact = await Contacts.findById(contactId);
+  export const updatedContactFavorite = async (contactId, userId, data) =>{
+    const contact = await Contacts.findOne({_id: contactId, owner: userId});
     Object.keys(data).forEach((key) =>{
       contact[key] = data[key]
     })

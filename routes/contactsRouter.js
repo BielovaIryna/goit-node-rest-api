@@ -1,4 +1,4 @@
-import express from "express";
+import {Router} from "express";
 import {
   getAllContacts,
   getOneContact,
@@ -10,9 +10,10 @@ import {
 import validateBody from "../helpers/validateBody.js";
 import { createContactSchema, updateContactFavoriveSchema, updateContactSchema } from "../schemas/contactsSchemas.js";
 import { checkContactId} from "../middlewares/contactsMiddlewares.js";
+import { auth } from "../middlewares/authMiddleware.js";
 
-const contactsRouter = express.Router();
-
+const contactsRouter = Router();
+contactsRouter.use(auth)
 contactsRouter.get("/", getAllContacts);
 
 contactsRouter.get("/:id", checkContactId, getOneContact);

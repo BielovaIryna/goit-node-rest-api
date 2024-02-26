@@ -15,7 +15,7 @@ export const listContact= (userId) =>{
     
   
   export const removeContact= async (contactId, userId) =>{
-   const contact= Contacts.findByIdAndDelete({_id:contactId, owner:userId});
+   const contact= Contacts.findOneAndDelete({_id:contactId, owner:userId});
 return contact
   } 
    
@@ -26,7 +26,7 @@ return contact
     
 
   export const updatedContact = async (contactId, userId, data) =>{
-    const contact = await Contacts.findByIdAndUpdate({_id:contactId, owner:userId}, data, {new: true} )
+    const contact = await Contacts.findOneAndUpdate({_id:contactId, owner:userId}, data, {new: true} )
     
     return contact
    }

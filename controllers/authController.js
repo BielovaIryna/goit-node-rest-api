@@ -6,16 +6,74 @@ import path from 'path';
 import {jimpImg } from "../helpers/jimps.js";
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
+
+
+import { serverConfig } from "../configs/serverConfig.js";
+import { sendEmail } from "../helpers/sendEmail.js";
+import HttpError from "../helpers/HttpError.js";
+import { log } from "console";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars")
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+
 const register = ctrlWrapper(async(req, res)=>{
     const {user} = await userRegister(req.body);
+    
+    const verifyEmail = {
+        to: user.email,
+        subject: "Verify email",
+        html: `<a target="_blank" href="${serverConfig.baseURL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
+      };
+  
+      await sendEmail(verifyEmail);
     res.status(201).json({
        user})
 });
 
+const verifyEmail = ctrlWrapper(async (req, res, next) => {
+
+      const { verificationToken } = req.params;
+   
+      const user = await Users.findOne({ verificationToken: verificationToken });
+     
+      if (user === null) {
+        throw HttpError(404, "User not found");
+      }
+      await Users.findByIdAndUpdate(user._id, {
+        verify: true,
+        verificationToken: null,
+      });
+      res.status(200).json({
+        message: "Verification successful",
+      });
+    
+  });
+  
+  const resendVerifyEmail =ctrlWrapper( async (req, res) => {
+    
+      const { email } = req.body;
+      const user = await Users.findOne({ email });
+      if (user === null) {
+        throw HttpError(400, "missing required field email");
+      }
+  
+      if (user.verify) {
+        throw HttpError(400, "Verification has already been passed");
+      }
+      const verifyEmail = {
+        to: email,
+        subject: "Verify email",
+        html: `<a target="_blank" href="${serverConfig.baseURL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
+      };
+  
+      await sendEmail(verifyEmail);
+  
+      res.json({ message: "Verification email sent" });
+    
+  });
+  
 const login = ctrlWrapper (async(req, res) =>{
     
     const {token, user} = await userLogin(req.body);
@@ -55,4 +113,4 @@ const updateAvatar = async(req, res)=>{
         res.status(200).json({ avatarURL });
       
 }
-export {register, login, logout, current, updateAvatar}
+export {register, login, logout, current, updateAvatar, verifyEmail, resendVerifyEmail}

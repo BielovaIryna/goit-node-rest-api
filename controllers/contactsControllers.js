@@ -18,8 +18,7 @@ export const getOneContact = ctrlWrapper(async(req, res) => {
     const userId = req.user.id;
     
     const contact = await getContactById(id, userId);
-    console.log(contact);
- 
+   
 
   if (contact.owner.toString() !== userId) {
     throw HttpError(404, "Contact Not Found");

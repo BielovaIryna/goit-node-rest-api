@@ -6,6 +6,7 @@ import path from 'path';
 import {jimpImg } from "../helpers/jimps.js";
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
+import HttpError from "../helpers/HttpError.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -38,7 +39,7 @@ const current =async(req, res)=>{
     res.status(200).json({ email, subscription });
 }
 
-const updateAvatar = async(req, res)=>{
+const updateAvatar = ctrlWrapper(async(req, res)=>{
     
         const { _id } = req.user;
        
@@ -54,5 +55,5 @@ const updateAvatar = async(req, res)=>{
     
         res.status(200).json({ avatarURL });
       
-}
+})
 export {register, login, logout, current, updateAvatar}

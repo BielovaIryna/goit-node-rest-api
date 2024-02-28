@@ -96,7 +96,7 @@ const current =async(req, res)=>{
     res.status(200).json({ email, subscription });
 }
 
-const updateAvatar = async(req, res)=>{
+const updateAvatar = ctrlWrapper(async(req, res)=>{
     
         const { _id } = req.user;
        
@@ -112,5 +112,5 @@ const updateAvatar = async(req, res)=>{
     
         res.status(200).json({ avatarURL });
       
-}
+})
 export {register, login, logout, current, updateAvatar, verifyEmail, resendVerifyEmail}
